@@ -2,15 +2,21 @@ package com.example.weather.service;
 
 import java.util.List;
 
-import com.example.weather.model.Region;
+import com.example.weather.model.RegionWeather;
 
 public interface WeatherService {
 
-	public int insertRegionData(Region region);
+	public int insertRegionData(RegionWeather region);
 	
-	public Region selectRegionData(int id);
+	public RegionWeather selectRegionData(int regionId);
 	
-	public List<Region> selectSeoulList();
+	public List<RegionWeather> selectSeoulList();
 	
-	public void updateWeather(Region weather);
+	public List<RegionWeather> selectRegionWeatherList();
+	
+	public void updateWeather(RegionWeather weather);
+	
+	public void deleteRegion(int regionId);
+	
+	public void truncateRegion();
 }

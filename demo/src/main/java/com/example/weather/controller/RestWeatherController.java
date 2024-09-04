@@ -2,6 +2,7 @@ package com.example.weather.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -21,16 +22,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Description;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.weather.model.Region;
+import com.example.weather.model.RegionWeather;
 import com.example.weather.model.Weather;
 import com.example.weather.service.WeatherService;
 
+import ch.qos.logback.core.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,12 +56,9 @@ public class RestWeatherController {
 	
 	private Logger logger = LoggerFactory.getLogger(RestWeatherController.class);
 
-	/**
-	 * csv 파일 저장
-	 * 
-	 */
-	@GetMapping("/region")
-	public ResponseEntity<String> setRegionData() {
+	@PostMapping("/postRegionData")
+	@Description("지역 정보 csv 파일 파싱 및 DB 저장")
+	public ResponseEntity<String> postRegionData() {
 		
 		String fileLocation = String.format("%s/%s", resourceLocation, "REGION_LIST.csv"); // 위도 경도 파일 경로
         Path path = Paths.get(fileLocation);
@@ -69,41 +70,58 @@ public class RestWeatherController {
             br = new BufferedReader(new InputStreamReader(
                     new UrlResource(uri).getInputStream()));
             String line = br.readLine(); // head 떼기
+            
+            if (!StringUtil.isNullOrEmpty(line)) {
+            	weatherService.truncateRegion(); // region_tbl 데이터를 새로 등록하기 위한 기존 데이터 전체 삭제
+            }
 
             while ((line = br.readLine()) != null) {
             	String[] splits = line.split(",");
             	
-            	Region region = new Region(Integer.parseInt(splits[0]), splits[1], splits[2], Integer.parseInt(splits[3]), Integer.parseInt(splits[4]));
+            	RegionWeather region = new RegionWeather(Integer.parseInt(splits[0]), splits[1], splits[2], Integer.parseInt(splits[3]), Integer.parseInt(splits[4]));
             	weatherService.insertRegionData(region);
                
             }
         } catch (IOException e) {
-        	
         	e.printStackTrace();
             throw new RuntimeException(e);
-            
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
-        	
             try {
-            	
                 br.close();
-                
             } catch (IOException e) {
-            	
             	e.printStackTrace();
-                throw new RuntimeException(e);
-                
+                throw new RuntimeException(e);   
             }
         }
         
-        return ResponseEntity.ok("데이터 저장 완료");
+        return ResponseEntity.ok("지역 정보 csv 파일 파싱 및 DB 저장 완료");
 	}
 	
-	@Transactional
-	@GetMapping("/getSeoulWeather")
-	@Description("서울날씨 조회")
-	public ResponseEntity<List<Region>> getSeoulWeather() {
-        List<Region> seoulList = weatherService.selectSeoulList();
+	@GetMapping("getRegionWeather")
+	@Description("지역 날씨 단건 조회")
+	public ResponseEntity<RegionWeather> getRegionWeather(@RequestParam int regionId) {
+		return ResponseEntity.ok(weatherService.selectRegionData(regionId));
+	}
+	
+	@GetMapping("getSeoulWeather")
+	@Description("서울 날씨 목록 조회")
+	public ResponseEntity<List<RegionWeather>> getSeoulWeather() {
+		return ResponseEntity.ok(weatherService.selectSeoulList());
+	}
+	
+	@GetMapping("getRegionWeatherList")
+	@Description("지역 날씨 목록 조회")
+	public ResponseEntity<List<RegionWeather>> getRegionWeatherList() {
+		return ResponseEntity.ok(weatherService.selectRegionWeatherList());
+	}
+	
+	@PutMapping("/putSeoulWeather")
+	@Description("서울 날씨 수정")
+	public ResponseEntity<List<RegionWeather>> putSeoulWeather() {
+        List<RegionWeather> seoulList = weatherService.selectSeoulList();
 
         // 2. 요청 시각 조회
         LocalDateTime now = LocalDateTime.now();
@@ -116,7 +134,7 @@ public class RestWeatherController {
         String hourStr = hour + "00"; // 정시 기준
         
         for (int i = 0; i < seoulList.size(); i++) {
-        	Region region = seoulList.get(i);
+        	RegionWeather region = seoulList.get(i);
         	
 	        String nx = Integer.toString(region.getNx());
 	        String ny = Integer.toString(region.getNy());
@@ -155,14 +173,11 @@ public class RestWeatherController {
 	            }
 	            rd.close();
 	            conn.disconnect();
+	            
 	            String data = sb.toString();
-	
-	            //// 응답 수신 완료 ////
-	            //// 응답 결과를 JSON 파싱 ////
-	
-	            Double temp = null;
-	            Double humid = null;
-	            Double rainAmount = null;
+	            BigDecimal temp = null;
+	            BigDecimal humid = null;
+	            BigDecimal rainAmount = null;
 	            
 	            logger.debug(":::::::::::::: [응답 데이터] > " + region.getRegionParent() + " > " + region.getRegionChild() + " > "  + data);
 	
@@ -179,7 +194,7 @@ public class RestWeatherController {
 	            for(int j = 0; j < jArray.length(); j++) {
 	                JSONObject obj = jArray.getJSONObject(j);
 	                String category = obj.getString("category");
-	                double obsrValue = obj.getDouble("obsrValue");
+	                BigDecimal obsrValue = obj.getBigDecimal("obsrValue");
 	
 	                switch (category) {
 	                    case "T1H":
@@ -204,13 +219,12 @@ public class RestWeatherController {
         return ResponseEntity.ok(seoulList);
     }
 	
-	@Transactional
-	@GetMapping("/getWeather")
-	@Description("날씨 단건 조회")
-	public ResponseEntity<Region> getRegionWeather(@RequestParam int regionId) {
+	@PutMapping("/putOnceWeather")
+	@Description("날씨 단건 수정")
+	public ResponseEntity<RegionWeather> putOnceWeather(@RequestParam int regionId) {
 
         StringBuilder urlBuilder =  new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst");
-        Region region = weatherService.selectRegionData(regionId);
+        RegionWeather region = weatherService.selectRegionData(regionId);
 
         // 2. 요청 시각 조회
         LocalDateTime now = LocalDateTime.now();
@@ -224,18 +238,6 @@ public class RestWeatherController {
         String nx = Integer.toString(region.getNx());
         String ny = Integer.toString(region.getNy());
         String currentChangeTime = now.format(DateTimeFormatter.ofPattern("yy.MM.dd ")) + hour;
-
-        // 기준 시각 조회 자료가 이미 존재하고 있다면 API 요청 없이 기존 자료 그대로 넘김
-        Weather prevWeather = region.getWeather();
-//        if(prevWeather != null && prevWeather.getLastUpdateTime() != null) {
-//            if(prevWeather.getLastUpdateTime().equals(currentChangeTime)) {
-//                log.info("기존 자료를 재사용합니다");
-//                WeatherResponseDTO dto = WeatherResponseDTO.builder()
-//                        .weather(prevWeather)
-//                        .message("OK").build();
-//                return ResponseEntity.ok(dto);
-//            }
-//        }
 
         try {
             urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
@@ -268,12 +270,9 @@ public class RestWeatherController {
             conn.disconnect();
             String data = sb.toString();
 
-            //// 응답 수신 완료 ////
-            //// 응답 결과를 JSON 파싱 ////
-
-            Double temp = null;
-            Double humid = null;
-            Double rainAmount = null;
+            BigDecimal temp = null;
+            BigDecimal humid = null;
+            BigDecimal rainAmount = null;
 
             JSONObject jObject = new JSONObject(data);
             JSONObject response = jObject.getJSONObject("response");
@@ -284,7 +283,7 @@ public class RestWeatherController {
             for(int i = 0; i < jArray.length(); i++) {
                 JSONObject obj = jArray.getJSONObject(i);
                 String category = obj.getString("category");
-                double obsrValue = obj.getDouble("obsrValue");
+                BigDecimal obsrValue = obj.getBigDecimal("obsrValue");
 
                 switch (category) {
                     case "T1H":
@@ -300,7 +299,7 @@ public class RestWeatherController {
             }
 
             region.setWeather(new Weather(temp, rainAmount, humid, currentChangeTime));
-            weatherService.updateWeather(region); // DB 업데이트
+            weatherService.updateWeather(region);
            
             return ResponseEntity.ok(region);
 
@@ -308,7 +307,14 @@ public class RestWeatherController {
             e.printStackTrace();
         }
         
-		return null;
+		return ResponseEntity.ok(null);
+    }
+	
+	@DeleteMapping("/deleteRegion")
+	@Description("지역 정보 단건 삭제")
+	public ResponseEntity<Integer> deleteRegion(@RequestParam int regionId) {
+		weatherService.deleteRegion(regionId);
+		return ResponseEntity.ok(regionId);
     }
 	
 }
