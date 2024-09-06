@@ -23,5 +23,10 @@
     "name": "weatherApi.serviceKey",
     "type": "java.lang.String",
     "description": "A description for 'weatherApi.serviceKey'"
+  },
+  {
+    "name": "weatherApi.serviceKey",
+    "type": "java.lang.String",
+    "description": "A description for 'weatherApi.serviceKey'"
   }
 ]}
