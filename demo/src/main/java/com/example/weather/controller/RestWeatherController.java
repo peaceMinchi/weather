@@ -204,8 +204,10 @@ public class RestWeatherController {
 	                        break;
 	                }
 	            }
-	
-	            region.setWeather(new Weather(temp, rainAmount, humid, currentChangeTime));
+				region.setTemp(temp);
+				region.setRainAmount(rainAmount);
+				region.setHumid(humid);
+				region.setRegionChild(currentChangeTime);
 	            weatherService.updateWeather(region); // DB 업데이트
 	        } catch (IOException e) {
 	            e.printStackTrace();
@@ -293,8 +295,10 @@ public class RestWeatherController {
                         break;
                 }
             }
-
-            region.setWeather(new Weather(temp, rainAmount, humid, currentChangeTime));
+			region.setTemp(temp);
+			region.setRainAmount(rainAmount);
+			region.setHumid(humid);
+			region.setRegionChild(currentChangeTime);
             weatherService.updateWeather(region);
            
             return ResponseEntity.ok(region);

@@ -94,10 +94,10 @@
 		UPDATE
 			REGION_TBL
 		SET
-			TEMP = IFNULL(#{weather.temp}, 0.0)
-			, RAIN_AMOUNT = IFNULL(#{weather.rainAmount}, 0.0)
-			, HUM_ID = IFNULL(#{weather.humid}, 0.0)
-			, LAST_UPDATE_TIME = IFNULL(#{weather.lastUpdateTime}, CURRENT_TIMESTAMP(6))
+			TEMP = IFNULL(#{temp}, 0.0)
+			, RAIN_AMOUNT = IFNULL(#{rainAmount}, 0.0)
+			, HUM_ID = IFNULL(#{humid}, 0.0)
+			, LAST_UPDATE_TIME = IFNULL(#{lastUpdateTime}, CURRENT_TIMESTAMP(6))
 		WHERE
 			ID = #{id}
 	</update>

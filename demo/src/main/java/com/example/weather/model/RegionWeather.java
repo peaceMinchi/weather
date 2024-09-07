@@ -27,8 +27,6 @@ public class RegionWeather {
 
     private String lastUpdateTime; // 마지막 갱신 시각 (시간 단위)
     
-    private Weather weather;
-    
     public RegionWeather(int id, String regionParent, String regionChild, int nx, int ny) {
         this.id = id;
         this.regionParent = regionParent;
