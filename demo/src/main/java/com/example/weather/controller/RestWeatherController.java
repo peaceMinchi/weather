@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Description;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,30 +48,28 @@ public class RestWeatherController {
 	
 	@Value("${resources.location}")
 	private String resourceLocation;
-	
+
 	@Autowired
 	private WeatherService weatherService;
 	
 	@Value("${weatherApi.serviceKey}")
     private String serviceKey;
-	
-	
-	private Logger logger = LoggerFactory.getLogger(RestWeatherController.class);
 
 	@PostMapping("/postRegionData")
 	@Description("지역 정보 csv 파일 파싱 및 DB 저장")
 	public ResponseEntity<String> postRegionData() {
 		
 		String fileLocation = String.format("%s/%s", resourceLocation, "REGION_LIST.csv"); // 위도 경도 파일 경로
-        Path path = Paths.get(fileLocation);
+		Path path = Paths.get(fileLocation);
         URI uri = path.toUri();
         BufferedReader br = null;
-    
+
         try {
         	
             br = new BufferedReader(new InputStreamReader(
-                    new UrlResource(uri).getInputStream()));
-            String line = br.readLine(); // head 떼기
+					new UrlResource(uri).getInputStream()));
+					//resource.getInputStream()));
+            String line = br.readLine(); // 첫줄 제거
             
             if (!StringUtil.isNullOrEmpty(line)) {
             	weatherService.truncateRegion(); // region_tbl 데이터를 새로 등록하기 위한 기존 데이터 전체 삭제
@@ -153,8 +153,6 @@ public class RestWeatherController {
 	            urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); /*예보지점의 Y 좌표값*/
 	
 	            URL url = new URL(urlBuilder.toString());
-	            
-	            logger.debug(":::::::::::::: [요청 url] > " +  urlBuilder.toString());
 	
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	            conn.setRequestMethod("GET");
@@ -178,8 +176,6 @@ public class RestWeatherController {
 	            BigDecimal temp = null;
 	            BigDecimal humid = null;
 	            BigDecimal rainAmount = null;
-	            
-	            logger.debug(":::::::::::::: [응답 데이터] > " + region.getRegionParent() + " > " + region.getRegionChild() + " > "  + data);
 	
 	            JSONObject jObject = new JSONObject(data);
 	            JSONObject response = jObject.getJSONObject("response");
