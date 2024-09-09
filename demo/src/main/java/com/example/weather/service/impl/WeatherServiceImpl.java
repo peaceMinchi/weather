@@ -53,4 +53,10 @@ public class WeatherServiceImpl implements WeatherService {
 		weatherMapper.truncateRegion();
 	}
 
+	@Transactional
+	@Override
+	public List<RegionWeather> selectAlllList() {
+		return weatherMapper.selectAlllList();
+	}
+
 }

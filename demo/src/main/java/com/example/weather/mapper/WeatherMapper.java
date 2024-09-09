@@ -21,4 +21,6 @@ public interface WeatherMapper {
 	public int deleteRegion(int regionId);
 	
 	public void truncateRegion();
+
+	public List<RegionWeather> selectAlllList();
 }

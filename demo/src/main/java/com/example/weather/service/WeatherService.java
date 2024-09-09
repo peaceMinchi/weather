@@ -19,4 +19,6 @@ public interface WeatherService {
 	public void deleteRegion(int regionId);
 	
 	public void truncateRegion();
+
+	public List<RegionWeather> selectAlllList();
 }
