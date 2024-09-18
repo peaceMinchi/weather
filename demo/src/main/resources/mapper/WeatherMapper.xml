@@ -26,10 +26,10 @@
 		)
 	</insert>
 	
-	<select id="selectRegionData" resultType="com.example.weather.model.RegionWeather">
+	<select id="selectRegionWeather" parameterType="integer" resultType="com.example.weather.model.RegionWeather">
 		/*
-			com.example.weather.mapper.WeatherMapper.selectRegionData
-			지역 상세 조회 (단건)
+			com.example.weather.mapper.WeatherMapper.selectRegionWeather
+			지역 날씨 조회 (단건)
 		*/
 		SELECT 
 			ID
@@ -66,10 +66,10 @@
 			REGION_TBL
 	</select>
 	
-	<select id="selectSeoulList" resultType="com.example.weather.model.RegionWeather">
+	<select id="selectSeoulWeatherList" resultType="com.example.weather.model.RegionWeather">
 		/*
-			com.example.weather.mapper.WeatherMapper.selectSeoulList
-			서울 지역 목록 조회
+			com.example.weather.mapper.WeatherMapper.selectSeoulWeatherList
+			서울 지역 날씨 목록 조회
 		*/
 		SELECT
 			ID
@@ -86,11 +86,31 @@
 		WHERE
 			REGION_PARENT LIKE CONCAT('서울', '%')
 	</select>
-
-	<select id="selectAlllList" resultType="com.example.weather.model.RegionWeather">
+	
+	<select id="selectRegion" parameterType="integer" resultType="com.example.weather.model.Region">
 		/*
-		com.example.weather.mapper.WeatherMapper.selectAlllList
-		지역 목록 조회
+			com.example.weather.mapper.WeatherMapper.selectRegion
+			지역 조회 (단건)
+		*/
+		SELECT 
+			ID
+			, REGION_PARENT
+			, REGION_CHILD
+			, NX
+			, NY
+			, TEMP
+			, RAIN_AMOUNT
+			, HUM_ID
+		FROM
+			REGION_TBL
+		WHERE
+			ID = #{id}
+	</select>
+
+	<select id="selectRegionList" resultType="com.example.weather.model.Region">
+		/*
+			com.example.weather.mapper.WeatherMapper.selectRegionList
+			지역 목록 조회
 		*/
 		SELECT
 			ID
@@ -101,9 +121,36 @@
 			, TEMP
 			, RAIN_AMOUNT
 			, HUM_ID
-			, LAST_UPDATE_TIME
 		FROM
 			REGION_TBL
+	</select>
+	
+	<select id="selectSeoulList" resultType="com.example.weather.model.Region">
+		/*
+			com.example.weather.mapper.WeatherMapper.selectSeoulList
+			서울 지역 목록 조회
+		*/
+		SELECT
+			ID
+			, REGION_PARENT
+			, REGION_CHILD
+			, NX
+			, NY
+			, TEMP
+			, RAIN_AMOUNT
+			, HUM_ID
+		FROM
+			REGION_TBL
+		WHERE
+			REGION_PARENT LIKE CONCAT('서울', '%')
+	</select>
+
+	<select id="test" resultType="java.lang.String">
+
+		set GLOBAL time_zone='-9:00';
+		SET time_zone = '-9:00';
+
+		SELECT CURRENT_TIMESTAMP(6);
 	</select>
 
 	<update id="updateWeather">

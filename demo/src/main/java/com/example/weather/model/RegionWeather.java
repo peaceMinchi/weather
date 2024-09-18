@@ -2,11 +2,14 @@ package com.example.weather.model;
 
 import java.math.BigDecimal;
 
+import org.springframework.context.annotation.Description;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Description("지역 날씨 정보를 조회할 때 사용하는 Model")
 public class RegionWeather {
 	
     private int id; // 지역 순번
@@ -26,12 +29,4 @@ public class RegionWeather {
     private BigDecimal humid; // 습도
 
     private String lastUpdateTime; // 마지막 갱신 시각 (시간 단위)
-    
-    public RegionWeather(int id, String regionParent, String regionChild, int nx, int ny) {
-        this.id = id;
-        this.regionParent = regionParent;
-        this.regionChild = regionChild;
-        this.nx = nx;
-        this.ny = ny;
-     }
 }
