@@ -2,29 +2,29 @@ package com.example.weather.mapper;
 
 import java.util.List;
 
+import com.example.weather.model.RegionWeatherSelectDTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.weather.model.Region;
-import com.example.weather.model.RegionWeather;
+import com.example.weather.model.RegionWeatherUpdateDTO;
 
 @Mapper
 public interface WeatherMapper {
 
-	public int insertRegionData(Region region);
+	public int insertRegionData(RegionWeatherUpdateDTO regionWeatherUpdateDTO);
 	
-	public RegionWeather selectRegionWeather(int regionId);
+	public RegionWeatherSelectDTO selectRegionWeather(int regionId);
 
-	public List<RegionWeather> selectRegionWeatherList();
+	public List<RegionWeatherSelectDTO> selectRegionWeatherList();
 	
-	public List<RegionWeather> selectSeoulWeatherList();
+	public List<RegionWeatherSelectDTO> selectSeoulWeatherList();
 	
-	public Region selectRegion(int regionId);
+	public RegionWeatherUpdateDTO selectRegion(int regionId);
 	
-	public List<Region> selectRegionList();
+	public List<RegionWeatherUpdateDTO> selectRegionList();
 
-	public List<Region> selectSeoulList();
+	public List<RegionWeatherUpdateDTO> selectSeoulList();
 	
-	public void updateWeather(Region region);
+	public void updateWeather(RegionWeatherUpdateDTO regionWeatherUpdateDTO);
 	
 	public int deleteRegion(int regionId);
 	

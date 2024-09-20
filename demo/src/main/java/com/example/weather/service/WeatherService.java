@@ -2,10 +2,10 @@ package com.example.weather.service;
 
 import java.util.List;
 
+import com.example.weather.model.RegionWeatherSelectDTO;
 import org.springframework.http.HttpStatus;
 
-import com.example.weather.model.Region;
-import com.example.weather.model.RegionWeather;
+import com.example.weather.model.RegionWeatherUpdateDTO;
 
 public interface WeatherService {
 	/**
@@ -21,38 +21,38 @@ public interface WeatherService {
 	 * @param regionId
 	 * @return
 	 */
-	public RegionWeather selectRegionWeather(int regionId);
+	public RegionWeatherSelectDTO selectRegionWeather(int regionId);
 	/**
 	 * 서울 날씨 정보 목록 조회
 	 * 
 	 * @return
 	 */
-	public List<RegionWeather> selectSeoulWeatherList();	
+	public List<RegionWeatherSelectDTO> selectSeoulWeatherList();
 	/**
 	 * 전 지역 날씨 목록 조회
 	 * 
 	 * @return
 	 */
-	public List<RegionWeather> selectRegionWeatherList();	
+	public List<RegionWeatherSelectDTO> selectRegionWeatherList();
 	/**
 	 * 전 지역 날씨 예보 수정
 	 * 
 	 * @return
 	 */
-	public List<Region> putAllWeather();	
+	public List<RegionWeatherUpdateDTO> putAllWeather();
 	/**
 	 * 서울 지역 날씨 예보 수정
 	 * 
 	 * @return
 	 */
-	public List<Region> putSeoulWeather();	
+	public List<RegionWeatherUpdateDTO> putSeoulWeather();
 	/**
 	 * 날씨 예보 단건 수정
 	 * 
 	 * @param regionId
 	 * @return
 	 */
-	public Region putOnceWeather(int regionId);	
+	public RegionWeatherUpdateDTO putOnceWeather(int regionId);
 	/**
 	 * 날씨 정보 단건 삭제
 	 * 
@@ -62,19 +62,19 @@ public interface WeatherService {
 	
 	// -------------------------------------------------------- before
 
-//	public int insertRegionData(RegionWeather region);
+//	public int insertRegionData(RegionWeatherSelectDTO region);
 //	
-//	public RegionWeather selectRegionData(int regionId);
+//	public RegionWeatherSelectDTO selectRegionData(int regionId);
 //	
-//	public List<RegionWeather> selectSeoulList();
+//	public List<RegionWeatherSelectDTO> selectSeoulList();
 //	
-//	public List<RegionWeather> selectRegionWeatherList();
+//	public List<RegionWeatherSelectDTO> selectRegionWeatherList();
 //	
-//	public void updateWeather(RegionWeather weather);
+//	public void updateWeather(RegionWeatherSelectDTO weather);
 //	
 //	public void deleteRegion(int regionId);
 //	
 //	public void truncateRegion();
 //
-//	public List<RegionWeather> selectAlllList();
+//	public List<RegionWeatherSelectDTO> selectAlllList();
 }

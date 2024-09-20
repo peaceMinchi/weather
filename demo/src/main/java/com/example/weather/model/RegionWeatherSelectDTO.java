@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Description("지역 날씨 정보를 조회할 때 사용하는 Model")
-public class RegionWeather {
+public class RegionWeatherSelectDTO {
 	
     private int id; // 지역 순번
 

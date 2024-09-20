@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.weather.model.Region;
-import com.example.weather.model.RegionWeather;
+import com.example.weather.model.RegionWeatherUpdateDTO;
+import com.example.weather.model.RegionWeatherSelectDTO;
 import com.example.weather.service.WeatherService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,63 +43,54 @@ public class RestWeatherController {
 		}
 		return ResponseEntity.ok("[Fail] 지역 정보 csv 파일 파싱 및 DB 저장 실패");
 	}
-	
-	@GetMapping("getRegionWeather")
-	@Description("지역 날씨 단건 조회")
-	public ResponseEntity<RegionWeather> getRegionWeather(@RequestParam int regionId) {
-		logger.info("[Start] getRegionWeather() parameter : {}", regionId);
-		return ResponseEntity.ok(weatherService.selectRegionWeather(regionId));
-	}
-	
-	@GetMapping("getSeoulWeather")
-	@Description("서울 날씨 목록 조회")
-	public ResponseEntity<List<RegionWeather>> getSeoulWeather() {
-		logger.info("[Start] getSeoulWeather()");
-		return ResponseEntity.ok(weatherService.selectSeoulWeatherList());
-	}
-	
-	@GetMapping("getRegionWeatherList")
-	@Description("전 지역 날씨 목록 조회")
-	public ResponseEntity<List<RegionWeather>> getRegionWeatherList() {
-		logger.info("[Start] getRegionWeatherList()");
-		return ResponseEntity.ok(weatherService.selectRegionWeatherList());
-	}
-	
-	
+
 	@PutMapping("/putAllWeather")
 	@Description("전 지역 날씨 예보 수정")
-	public ResponseEntity<List<Region>> putAllWeather() {
+	public ResponseEntity<List<RegionWeatherUpdateDTO>> putAllWeather() {
 		logger.info("[Start] putAllWeather()");
 		return ResponseEntity.ok(weatherService.putAllWeather());
-    }
+	}
 
 	@PutMapping("/putSeoulWeather")
 	@Description("서울 지역 날씨 예보 수정")
-	public ResponseEntity<List<Region>> putSeoulWeather() {
+	public ResponseEntity<List<RegionWeatherUpdateDTO>> putSeoulWeather() {
 		logger.info("[Start] putSeoulWeather()");
 		return ResponseEntity.ok(weatherService.putSeoulWeather());
 	}
 
 	@PutMapping("/putOnceWeather")
 	@Description("날씨 예보 단건 수정")
-	public ResponseEntity<Region> putOnceWeather(@RequestParam int regionId) {
+	public ResponseEntity<RegionWeatherUpdateDTO> putOnceWeather(@RequestParam int regionId) {
 		logger.info("[Start] putOnceWeather() parameter : {}", regionId);
 		return ResponseEntity.ok(weatherService.putOnceWeather(regionId));
-    }
+	}
+
+	@GetMapping("/getRegionWeather")
+	@Description("지역 날씨 단건 조회")
+	public ResponseEntity<RegionWeatherSelectDTO> getRegionWeather(@RequestParam int regionId) {
+		logger.info("[Start] getRegionWeather() parameter : {}", regionId);
+		return ResponseEntity.ok(weatherService.selectRegionWeather(regionId));
+	}
 	
+	@GetMapping("/getSeoulWeather")
+	@Description("서울 날씨 목록 조회")
+	public ResponseEntity<List<RegionWeatherSelectDTO>> getSeoulWeather() {
+		logger.info("[Start] getSeoulWeather()");
+		return ResponseEntity.ok(weatherService.selectSeoulWeatherList());
+	}
+	
+	@GetMapping("/getRegionWeatherList")
+	@Description("전 지역 날씨 목록 조회")
+	public ResponseEntity<List<RegionWeatherSelectDTO>> getRegionWeatherList() {
+		logger.info("[Start] getRegionWeatherList()");
+		return ResponseEntity.ok(weatherService.selectRegionWeatherList());
+	}
+
 	@DeleteMapping("/deleteRegion")
 	@Description("날씨 정보 단건 삭제")
 	public ResponseEntity<Integer> deleteRegion(@RequestParam int regionId) {
 		logger.info("[Start] deleteRegion() parameter : {}", regionId);
 		weatherService.deleteRegion(regionId);
 		return ResponseEntity.ok(regionId);
-    }
-
-	@GetMapping("/getLogger")
-	public void printLog() {
-        logger.debug("[debug] log!");
-        logger.info("[info] log!");
-        logger.warn("[warn] log!");
-        logger.error("[error] log!");
     }
 }

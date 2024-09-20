@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Description("지역 날씨 정보를 수정할 때 사용하는 Model")
-public class Region {
+public class RegionWeatherUpdateDTO {
 	
     private int id; // 지역 순번
 
@@ -30,7 +30,7 @@ public class Region {
     
     private String requestTime; // 서버 요청 시각
     
-    public Region(int id, String regionParent, String regionChild, int nx, int ny) {
+    public RegionWeatherUpdateDTO(int id, String regionParent, String regionChild, int nx, int ny) {
         this.id = id;
         this.regionParent = regionParent;
         this.regionChild = regionChild;
