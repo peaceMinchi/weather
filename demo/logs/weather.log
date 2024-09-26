@@ -1,2 +1,60 @@
-[2024-09-20 21:36:52.540]  INFO 4624 --- [ionShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
-[2024-09-20 21:36:52.554]  INFO 4624 --- [ionShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+[2024-09-24 13:04:22.426]  INFO 16240 --- [  restartedMain] c.e.w.DemoApplication                    : Starting DemoApplication using Java 22.0.2 with PID 16240 (C:\Users\KMS\Desktop\minchi\weather\demo\target\classes started by KMS in C:\Users\KMS\Desktop\minchi\weather\demo)
+[2024-09-24 13:04:22.463]  INFO 16240 --- [  restartedMain] c.e.w.DemoApplication                    : The following 1 profile is active: "dev"
+[2024-09-24 13:04:22.688]  INFO 16240 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[2024-09-24 13:04:22.690]  INFO 16240 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[2024-09-24 13:04:25.910]  INFO 16240 --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port 8443 (https)
+[2024-09-24 13:04:25.943]  INFO 16240 --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["https-jsse-nio-8443"]
+[2024-09-24 13:04:25.965]  INFO 16240 --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+[2024-09-24 13:04:25.966]  INFO 16240 --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/10.1.30]
+[2024-09-24 13:04:26.059]  INFO 16240 --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+[2024-09-24 13:04:26.063]  INFO 16240 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3366 ms
+[2024-09-24 13:04:28.065]  WARN 16240 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+[2024-09-24 13:04:28.114]  INFO 16240 --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["https-jsse-nio-8443"]
+[2024-09-24 13:04:28.678]  INFO 16240 --- [  restartedMain] o.a.t.u.n.N.certificate                  : Connector [https-jsse-nio-8443], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\KMS\.keystore] using alias [ayokeystore] with trust store [null]
+[2024-09-24 13:04:28.710]  INFO 16240 --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port 8443 (https) with context path '/'
+[2024-09-24 13:04:28.728]  INFO 16240 --- [  restartedMain] c.e.w.DemoApplication                    : Started DemoApplication in 7.555 seconds (process running for 10.993)
+[2024-09-24 13:05:53.443]  INFO ${sys:PID} --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.waether.DemoApplicationTests]: DemoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2024-09-24 13:05:53.803]  INFO ${sys:PID} --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.waether.DemoApplicationTests for test class com.example.waether.DemoApplicationTests
+[2024-09-24 13:05:54.221]  INFO ${sys:PID} --- [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+[2024-09-24 13:05:55.129]  WARN 16840 --- [           main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/KMS/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/KMS/.m2/repository/org/json/json/20240303/json-20240303.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+[2024-09-24 13:05:55.189]  INFO 16840 --- [           main] c.e.w.DemoApplicationTests               : Starting DemoApplicationTests using Java 22.0.2 with PID 16840 (started by KMS in C:\Users\KMS\Desktop\minchi\weather\demo)
+[2024-09-24 13:05:55.191]  INFO 16840 --- [           main] c.e.w.DemoApplicationTests               : The following 1 profile is active: "dev"
+[2024-09-24 13:05:56.207]  INFO 16840 --- [           main] c.e.w.DemoApplicationTests               : Started DemoApplicationTests in 2.005 seconds (process running for 5.098)
+[2024-09-24 13:26:35.022]  INFO ${sys:PID} --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.waether.DemoApplicationTests]: DemoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2024-09-24 13:26:35.546]  INFO ${sys:PID} --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.waether.DemoApplicationTests for test class com.example.waether.DemoApplicationTests
+[2024-09-24 13:26:36.130]  INFO ${sys:PID} --- [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+[2024-09-24 13:26:37.253]  WARN 13292 --- [           main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/KMS/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/KMS/.m2/repository/org/json/json/20240303/json-20240303.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+[2024-09-24 13:26:37.324]  INFO 13292 --- [           main] c.e.w.DemoApplicationTests               : Starting DemoApplicationTests using Java 22.0.2 with PID 13292 (started by KMS in C:\Users\KMS\Desktop\minchi\weather\demo)
+[2024-09-24 13:26:37.328]  INFO 13292 --- [           main] c.e.w.DemoApplicationTests               : The following 1 profile is active: "dev"
+[2024-09-24 13:26:38.136]  INFO 13292 --- [           main] c.e.w.DemoApplicationTests               : Started DemoApplicationTests in 2.032 seconds (process running for 10.145)
+[2024-09-24 13:32:29.090]  INFO ${sys:PID} --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.waether.DemoApplicationTests]: DemoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2024-09-24 13:32:29.573]  INFO ${sys:PID} --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.waether.DemoApplicationTests for test class com.example.waether.DemoApplicationTests
+[2024-09-24 13:32:30.269]  INFO ${sys:PID} --- [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+[2024-09-24 13:32:31.542]  WARN 25440 --- [           main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/KMS/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/KMS/.m2/repository/org/json/json/20240303/json-20240303.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+[2024-09-24 13:32:31.605]  INFO 25440 --- [           main] c.e.w.DemoApplicationTests               : Starting DemoApplicationTests using Java 22.0.2 with PID 25440 (started by KMS in C:\Users\KMS\Desktop\minchi\weather\demo)
+[2024-09-24 13:32:31.608]  INFO 25440 --- [           main] c.e.w.DemoApplicationTests               : The following 1 profile is active: "prod"
+[2024-09-24 13:32:32.407]  INFO 25440 --- [           main] c.e.w.DemoApplicationTests               : Started DemoApplicationTests in 2.259 seconds (process running for 6.868)

@@ -29,6 +29,4 @@ public interface WeatherMapper {
 	public int deleteRegion(int regionId);
 	
 	public void truncateRegion();
-
-	String test();
 }

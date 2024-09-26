@@ -50,16 +50,16 @@ public class WeatherServiceImpl implements WeatherService {
 
 	@Override
 	public HttpStatus insertRegionData() {
-		String fileLocation = String.format("%s/%s", resourceLocation, "REGION_LIST.csv"); // 위도 경도 파일 경로
-		Path path = Paths.get(fileLocation);
-        URI uri = path.toUri();
+		String fileLocation = String.format("%s/%s", resourceLocation, "REGION_LIST.csv");
+		Path path = Paths.get(fileLocation);	// 유연성
+        URI uri = path.toUri();					// 네트워크 리소스나 + 로컬 파일에 통합된 방식으로 접근, 확장성 o
         BufferedReader br = null;
 
         try {
             br = new BufferedReader(new InputStreamReader(
 					new UrlResource(uri).getInputStream()));
 
-            String line = br.readLine(); // 첫줄 제거
+            String line = br.readLine();
 
             if (!line.isEmpty()) {
             	weatherMapper.truncateRegion(); // region_tbl 데이터를 새로 등록하기 위한 기존 데이터 전체 삭제
@@ -108,18 +108,18 @@ public class WeatherServiceImpl implements WeatherService {
 
 	@Override
 	public List<RegionWeatherUpdateDTO> putAllWeather() {
-		// 1. Open Api 요청에 필요한 시간 가져오기
+		// 1. Open Api 요청에 필요한 '시간' 가져오기
 		OpenApiSearchTimeDTO search = this.setOpenApiSearch();
 		
-		// 2. Open Api 를 요청 시각 가져오기
+		// 2. Open Api 요청 '시각' 가져오기
         String requestTime = this.getLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
 
-		// 3. 지역 목록 조회
+		// 3. 전체 지역 목록 조회
 		List<RegionWeatherUpdateDTO> list = weatherMapper.selectRegionList();
 
         for (int i = 0; i < list.size(); i++) {
         	RegionWeatherUpdateDTO regionWeatherUpdateDTO = list.get(i);
-        	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 시각 셋팅
+        	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 '시각' 셋팅
         	this.httpConnectionOpenApiWeather(search, regionWeatherUpdateDTO); // API 요청
         }
 
@@ -128,18 +128,18 @@ public class WeatherServiceImpl implements WeatherService {
 	
 	@Override
 	public List<RegionWeatherUpdateDTO> putSeoulWeather() {
-		// 1. Open Api 요청에 필요한 시간 가져오기
+		// 1. Open Api 요청에 필요한 '시간' 가져오기
 		OpenApiSearchTimeDTO search = setOpenApiSearch();
-		
-		// 2. Open Api 를 요청 시각 가져오기
+
+		// 2. Open Api 요청 '시각' 가져오기
         String requestTime = getLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
         
 		// 3. 서울 지역 목록 조회
 		List<RegionWeatherUpdateDTO> list = weatherMapper.selectSeoulList();
 		for (int i = 0; i < list.size(); i++) {
 			RegionWeatherUpdateDTO regionWeatherUpdateDTO = list.get(i);
-        	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 시각 셋팅
-        	this.httpConnectionOpenApiWeather(search, regionWeatherUpdateDTO);
+        	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 '시각' 셋팅
+        	this.httpConnectionOpenApiWeather(search, regionWeatherUpdateDTO); // API 요청
 		}
 
 		return list;
@@ -148,17 +148,17 @@ public class WeatherServiceImpl implements WeatherService {
 
 	@Override
 	public RegionWeatherUpdateDTO putOnceWeather(int regionId) {
-		// 1. Open Api 요청에 필요한 시간 가져오기
+		// 1. Open Api 요청에 필요한 '시간' 가져오기
 		OpenApiSearchTimeDTO search = setOpenApiSearch();
-		
-		// 2. Open Api 를 요청 시각 가져오기
+
+		// 2. Open Api 요청 '시각' 가져오기
         String requestTime = getLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
         
-        // 3. 지역 정보 조회
+        // 3. 지역 정보 '단건' 조회
         RegionWeatherUpdateDTO regionWeatherUpdateDTO = weatherMapper.selectRegion(regionId);
-    	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 시각 셋팅
+    	regionWeatherUpdateDTO.setRequestTime(requestTime); // Open Api 를 요청한 '시각' 셋팅
     	
-    	this.httpConnectionOpenApiWeather(search, regionWeatherUpdateDTO);
+    	this.httpConnectionOpenApiWeather(search, regionWeatherUpdateDTO); // API 요청
 		return regionWeatherUpdateDTO;
 	}
 
@@ -186,7 +186,7 @@ public class WeatherServiceImpl implements WeatherService {
         String yyyyMMdd = getLocalDateTime().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         int hour = getLocalDateTime().getHour();
         int min = getLocalDateTime().getMinute();
-        if(min <= 10) { // 해당 시각 발표 전에는 자료가 없음 - 이전시각을 기준으로 해야함 - 10분 부터 적용
+        if(min <= 10) { // 10분 이전에는, 이전시각을 기준으로 해야함
             hour -= 1;
         }
         String hourStr = hour + "00"; // 정시 기준
@@ -227,15 +227,15 @@ public class WeatherServiceImpl implements WeatherService {
 	        
 	        logger.info("[url] {}", urlBuilder.toString());
 	
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // HTTP 관련 설정 및 요청
 	        conn.setRequestMethod("GET");
 	        conn.setRequestProperty("Content-type", "application/json");
 	
 	        BufferedReader rd;
 			logger.info("[HttpURLConnection ResponseCode] : {}", conn.getResponseCode());
 
+			// ResponseCode 가 성공인 경우 InputStream 을 BufferedReader 으로 읽어서 응답 데이터를 읽어온다.
 	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-				// ResponseCode 가 성공인 경우 InputStream 를 BufferedReader 으로 읽어서 응답 데이터를 가져온다.
 	            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				StringBuilder sb = new StringBuilder();
 				String line;
@@ -254,8 +254,8 @@ public class WeatherServiceImpl implements WeatherService {
 				JSONObject jsonObject = null;
 				JSONObject response = null;
 				JSONObject header = null;
-				if (!data.isEmpty()) {
-					jsonObject = new JSONObject(data); // String type -> Json Type
+				if (!data.isEmpty()) {       // String type -> Json Object Type
+					jsonObject = new JSONObject(data);
 					response = jsonObject.getJSONObject("response");
 					header = response.getJSONObject("header");
 					String resultCode = header.getString("resultCode"); // API 상태 코드를 확인하기 위한 값
@@ -263,7 +263,7 @@ public class WeatherServiceImpl implements WeatherService {
 					logger.info("[resultCode] {}, [regionId] {}", resultCode, regionWeatherUpdateDTO.getId());
 					this.openApiReturnMessage(resultCode);
 
-					// resultCode 가 00 인 경우는 정상임으로, 정상일 경우에 응답 데이터를 JSONObject 화 하여 필요한 데이터를 가져온다.
+					// resultCode 가 00 인 경우는 정상임으로, 정상일 경우에 응답 데이터를 JSONObject 변경 하여 필요한 데이터를 가져온다.
 					if ("00".equals(resultCode)) {
 						JSONObject body = response.getJSONObject("body");
 						JSONObject items = body.getJSONObject("items");

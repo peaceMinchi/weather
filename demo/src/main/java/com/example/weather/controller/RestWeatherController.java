@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rest/weather")
+@RequestMapping("/api")
 public class RestWeatherController {
 	
 	@Autowired
@@ -33,7 +33,7 @@ public class RestWeatherController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestWeatherController.class.getName());
 
-	@PostMapping("/postRegionData")
+	@PostMapping("/weather")
 	@Description("지역 정보 csv 파일 파싱 및 DB 저장")
 	public ResponseEntity<String> postRegionData() {
 		logger.info("[Start] postRegionData()");
@@ -44,49 +44,49 @@ public class RestWeatherController {
 		return ResponseEntity.ok("[Fail] 지역 정보 csv 파일 파싱 및 DB 저장 실패");
 	}
 
-	@PutMapping("/putAllWeather")
+	@PutMapping("/weather/all")
 	@Description("전 지역 날씨 예보 수정")
 	public ResponseEntity<List<RegionWeatherUpdateDTO>> putAllWeather() {
 		logger.info("[Start] putAllWeather()");
 		return ResponseEntity.ok(weatherService.putAllWeather());
 	}
 
-	@PutMapping("/putSeoulWeather")
+	@PutMapping("/weather/seoul")
 	@Description("서울 지역 날씨 예보 수정")
 	public ResponseEntity<List<RegionWeatherUpdateDTO>> putSeoulWeather() {
 		logger.info("[Start] putSeoulWeather()");
 		return ResponseEntity.ok(weatherService.putSeoulWeather());
 	}
 
-	@PutMapping("/putOnceWeather")
+	@PutMapping("/weather/single")
 	@Description("날씨 예보 단건 수정")
 	public ResponseEntity<RegionWeatherUpdateDTO> putOnceWeather(@RequestParam int regionId) {
 		logger.info("[Start] putOnceWeather() parameter : {}", regionId);
 		return ResponseEntity.ok(weatherService.putOnceWeather(regionId));
 	}
 
-	@GetMapping("/getRegionWeather")
+	@GetMapping("/weather/single")
 	@Description("지역 날씨 단건 조회")
 	public ResponseEntity<RegionWeatherSelectDTO> getRegionWeather(@RequestParam int regionId) {
 		logger.info("[Start] getRegionWeather() parameter : {}", regionId);
 		return ResponseEntity.ok(weatherService.selectRegionWeather(regionId));
 	}
 	
-	@GetMapping("/getSeoulWeather")
+	@GetMapping("/weather/seoul")
 	@Description("서울 날씨 목록 조회")
 	public ResponseEntity<List<RegionWeatherSelectDTO>> getSeoulWeather() {
 		logger.info("[Start] getSeoulWeather()");
 		return ResponseEntity.ok(weatherService.selectSeoulWeatherList());
 	}
 	
-	@GetMapping("/getRegionWeatherList")
+	@GetMapping("/weather/all")
 	@Description("전 지역 날씨 목록 조회")
 	public ResponseEntity<List<RegionWeatherSelectDTO>> getRegionWeatherList() {
 		logger.info("[Start] getRegionWeatherList()");
 		return ResponseEntity.ok(weatherService.selectRegionWeatherList());
 	}
 
-	@DeleteMapping("/deleteRegion")
+	@DeleteMapping("/weather")
 	@Description("날씨 정보 단건 삭제")
 	public ResponseEntity<Integer> deleteRegion(@RequestParam int regionId) {
 		logger.info("[Start] deleteRegion() parameter : {}", regionId);

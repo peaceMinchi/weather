@@ -15,7 +15,7 @@
         <!-- 파일 생성 -->
         <RollingFile name="RollingFileAppender">
             <FileName>${LOG_DIR}/weather.log</FileName>
-            <FilePattern>${LOG_DIR}/weather.%d{yyyy-MM-dd-hh}.%i.log.gz</FilePattern>
+            <FilePattern>${LOG_DIR}/weather.%d{yyyy-MM-dd-hh-mm}.%i.log.gz</FilePattern>
             <PatternLayout pattern="${DEFAULT_PATTERN}" />
             <Policies>
                 <!-- 파일 크기가 10MB에 도달하면 새로운 파일을 생성 -->
@@ -28,7 +28,7 @@
         </RollingFile>
     </Appenders>
 
-    <Loggers> <!-- 어떤 종류의 로그를 출력할지, 레벨과 로그가 출력될 위치를 설정 -->
+    <Loggers> <!-- 어떤 종류의 로그를 출력할지, 레벨과 로그가 출력될, 위치를 설정 -->
         <!-- Root : 일반적인 로그 정책, 반드시 하나 정의해야함 -->
         <!--
             level 이 INFO 이상인 로그를 Console 에 출력하고 중복된 로그는 남기지 않는다.
